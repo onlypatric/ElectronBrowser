@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Electron Browser</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="font.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css"
+    />
+  </head>
+  <body>
+    <div class="app-container">
+      <div class="titlebar">
+        <div class="navigation-dots">
+          <button class="re" id="close" onclick="closeWindow()"></button>
+          <button class="ye" id="minimize" onclick="minimizeWindow()"></button>
+          <button class="gr" id="resize" onclick="resizeWindow()"></button>
+        </div>
+
+        <div class="search-bar">
+          <button
+            class="action-button"
+            style="
+              background: url(icons/chevron_left_FILL0_wght600_GRAD200_opsz48-modified.png)
+                center #00000000;
+              background-size: contain;
+            "
+            onclick="if(webview.canGoBack())webview.goBack()"
+            ></button>
+          <button
+            class="action-button"
+            style="
+              background: url(icons/chevron_right_FILL0_wght600_GRAD200_opsz48-modified.png)
+                center #00000000;
+              background-size: contain;
+            "
+            onclick="if(webview.canGoForward())webview.goForward()"
+          ></button>
+          <button
+            class="action-button"
+            style="
+              background: url(icons/refresh_FILL0_wght700_GRAD200_opsz48-modified.png)
+                center #00000000;
+              background-size: contain;
+            "
+            onclick="webview.reloadIgnoringCache()"
+          ></button>
+          
+          <input class="search" id="search" type="text"/>
+          <button
+            class="action-button"
+            onclick="nav()"
+            style="
+              background: url(icons/search_FILL0_wght600_GRAD200_opsz48-modified.png)
+                center;
+              background-size: contain;
+            "
+          ></button>
+          <button
+            class="action-button"
+            style="              background: url(icons/home_FILL0_wght700_GRAD200_opsz48-modified.png)
+            center;background-size:contain;background-color: #00000000;"
+            onclick="home();"
+          ></button>
+          <button
+            class="action-button"
+            style="              background: url(icons/code_FILL0_wght700_GRAD200_opsz48-modified.png)
+            center;background-size:contain;background-color: #00000000;"
+            onclick="webview.openDevTools();"
+          ></button>
+          
+        </div>
+        <div
+          class="navigation-dots-replacement"
+          style="-webkit-app-region: drag"
+        >
+          <button style="-webkit-app-region: drag"></button>
+          <button style="-webkit-app-region: drag"></button>
+          <button style="-webkit-app-region: drag"></button>
+        </div>
+      </div>
+      <webview src="about:blank" id="browser" target="_parent" style="border-radius: 10px;background-color: #00000000;width: 98%;height: 90%;margin:auto" nodeintegration></webview>
+    </div>
+  </body>
+  <script>
+    const { ipcRenderer } = require("electron");
+    const $ = require("jquery");
+
+    function minimizeWindow() {
+      ipcRenderer.send("minimize-window");
+    }
+    function closeWindow() {
+      ipcRenderer.send("close-window");
+    }
+    function resizeWindow() {
+      ipcRenderer.send("resize-window");
+    }
+    $("input#search").submit((e)=>{
+      e.preventDefault();
+      nav();
+    })
+    $("input#search").on('keypress',function(e) {
+        if(e.which == 13) {
+          nav();
+        }
+      }
+    )
+    function home() {
+      webview.loadURL("about:blank");
+    }
+    const webview = document.querySelector('webview')
+    function nav() {
+      console.log("Loading: " +$("input.search").val());
+      webview.loadURL("https://www.google.com/search?q="+encodeURI($("input.search").val()));
+    }
+  </script>
+</html>

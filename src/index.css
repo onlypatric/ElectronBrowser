@@ -1,0 +1,141 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: transparent ;
+  backdrop-filter: blur(20px);
+}
+.app-container{
+  width: 100%;
+  height: 100%;
+}
+.searchBar{
+  font-family: "Segoe UI Variable Text";
+  -webkit-app-region: no-drag;
+  outline: none;
+  border:0;
+  width: 50%;
+  height: 25px;
+  margin: 2.5px;
+  background-color: #ffffff25;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.titlebar {
+  
+  width: 100%;
+  min-height: 25px;
+  background-color: inherit;
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+  display: flex;
+  padding: 5px;
+}
+div.navigation-dots{
+  border-radius: 10px;
+  display: flex;
+  margin-left: 2px;
+  margin-right: 10px;
+  align-items: center;
+  align-content: center;
+}
+div.navigation-dots *{
+  margin-top:2.5px;
+  margin-bottom:2.5px;
+  width: 15px;
+  height: 15px;
+  border-radius: 40px;
+  -webkit-box-shadow: 5px 5px 19px 4px rgba(0,0,0,0.53); 
+  box-shadow: 5px 5px 19px 3px rgba(0, 0, 0, 0.236);
+  -webkit-app-region:no-drag;
+  outline: none;
+  border: 0;
+}
+
+div.navigation-dots-replacement{
+  border-radius: 10px;
+  display: flex;
+  margin-left: 2px;
+  margin-right: 10px;
+  align-items: center;
+  align-content: center;
+}
+div.navigation-dots-replacement *{
+  margin-top:2.5px;
+  margin-bottom:2.5px;
+  width: 15px;
+  height: 15px;
+  border-radius: 40px;
+  background-color: #00000000;
+  -webkit-app-region:no-drag;
+  outline: none;
+  border: 0;
+}
+.re{
+  margin-left:5px;
+  margin-right:3px;
+  background-color: red;
+}
+.re:hover{
+  background-color: rgb(198, 9, 9);
+}
+.ye{
+  margin-left:3px;
+  margin-right:3px;
+  background-color: yellow;
+}
+.ye:hover{
+  background-color: rgb(195, 195, 8);
+}
+.gr{
+  margin-left:3px;
+  margin-right:5px;
+  background-color: rgb(71, 152, 71);
+}
+.gr:hover{
+  background-color: rgb(44, 114, 44);
+}
+
+.flex{
+  display: flex;
+  align-items: center;
+  align-content: center;
+}
+div.search-bar{
+  margin: auto;
+  display: flex;
+  align-items: center;
+  align-content: center;
+}
+input.search{
+  -webkit-app-region:no-drag;
+  background-color: #00000030;
+  color:#fff;
+  height: 25px;
+  padding: 5px;
+  margin: 2.5px;
+  width: 50ch;
+  border-radius: 10px;
+  outline: none;
+  border: 0;
+}
+button.action-button{
+  -webkit-app-region:no-drag;
+  width: 35px;
+  margin: 2.5px;padding: 0;
+  outline: none;
+  border-radius: 10px;
+  height: 35px;
+  border: 0;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
