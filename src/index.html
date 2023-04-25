@@ -5,10 +5,6 @@
     <title>Electron Browser</title>
     <link rel="stylesheet" href="index.css" />
     <link rel="stylesheet" href="font.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css"
-    />
   </head>
   <body>
     <div class="app-container">
@@ -28,7 +24,7 @@
               background-size: contain;
             "
             onclick="if(webview.canGoBack())webview.goBack()"
-            ></button>
+          ></button>
           <button
             class="action-button"
             style="
@@ -47,8 +43,13 @@
             "
             onclick="webview.reloadIgnoringCache()"
           ></button>
-          
-          <input class="search" id="search" type="text"/>
+
+          <input
+            class="search"
+            id="search"
+            type="text"
+            placeholder="Search or type a URL"
+          />
           <button
             class="action-button"
             onclick="nav()"
@@ -60,17 +61,34 @@
           ></button>
           <button
             class="action-button"
-            style="              background: url(icons/home_FILL0_wght700_GRAD200_opsz48-modified.png)
-            center;background-size:contain;background-color: #00000000;"
+            style="
+              background: url(icons/home_FILL0_wght700_GRAD200_opsz48-modified.png)
+                center;
+              background-size: contain;
+              background-color: #00000000;
+            "
             onclick="home();"
           ></button>
           <button
             class="action-button"
-            style="              background: url(icons/code_FILL0_wght700_GRAD200_opsz48-modified.png)
-            center;background-size:contain;background-color: #00000000;"
-            onclick="webview.openDevTools();"
+            style="
+              background: url(icons/code_FILL0_wght700_GRAD200_opsz48-modified.png)
+                center;
+              background-size: contain;
+              background-color: #00000000;
+            "
+            onclick="console.clear();webview.openDevTools();"
           ></button>
-          
+          <button
+            class="action-button"
+            style="
+              background: url(icons/psychology_FILL0_wght700_GRAD200_opsz48-modified.png)
+                center;
+              background-size: contain;
+              background-color: #00000000;
+            "
+            onclick="openPIzzaGPT();"
+          ></button>
         </div>
         <div
           class="navigation-dots-replacement"
@@ -81,7 +99,49 @@
           <button style="-webkit-app-region: drag"></button>
         </div>
       </div>
-      <webview src="about:blank" id="browser" target="_parent" style="border-radius: 10px;background-color: #00000000;width: 98%;height: 90%;margin:auto" nodeintegration></webview>
+      <div
+        class="webview-container"
+        style="
+          width: 98%;
+          height: 92%;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          align-content: center;
+          margin: auto;
+        "
+      >
+        <webview
+          src="about:blank"
+          id="PizzaGPT"
+          class="PizzaGPT"
+          target="_parent"
+          style="
+            animation: all linear 1s;
+            margin: auto;
+            display: none;
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+          "
+        >
+        </webview>
+        <webview
+          src="about:blank"
+          id="browser"
+          class="browser"
+          target="_parent"
+          style="
+            border-radius: 10px;
+            background-color: #00000000;
+            width: 98%;
+            height: 100%;
+            margin: auto;
+            animation: all linear 1s;
+          "
+          nodeintegration
+        ></webview>
+      </div>
     </div>
   </body>
   <script>
@@ -97,23 +157,74 @@
     function resizeWindow() {
       ipcRenderer.send("resize-window");
     }
-    $("input#search").submit((e)=>{
+    $("input#search").submit((e) => {
       e.preventDefault();
       nav();
-    })
-    $("input#search").on('keypress',function(e) {
-        if(e.which == 13) {
-          nav();
-        }
+    });
+    $("input#search").on("keypress", function (e) {
+      if (e.which == 13) {
+        nav();
       }
-    )
+    });
     function home() {
       webview.loadURL("about:blank");
     }
-    const webview = document.querySelector('webview')
-    function nav() {
-      console.log("Loading: " +$("input.search").val());
-      webview.loadURL("https://www.google.com/search?q="+encodeURI($("input.search").val()));
+    const webview = document.querySelector("webview.browser");
+    function parseURL(input) {
+      let regex = /^(https?:\/\/)?[\da-z\.-]+\.[a-z\.]{2,6}[\/\w \.-]*\/?$/i;
+      if (regex.test(input)) {
+        if (!input.startsWith("http://") && !input.startsWith("https://")) {
+          input = "https://" + input;
+        }
+        return input;
+      } else {
+        return "https://www.google.com/search?q=" + input;
+      }
     }
+    function nav() {
+      console.log("Loading: " + $("input.search").val());
+      webview.loadURL(parseURL($("input.search").val()));
+    }
+    webview.addEventListener("did-navigate", (event) => {
+      console.log(`Webview navigation changed to ${event.url}`);
+      if (String(event.url).includes("www.google.com/search?q=")) {
+        let x = String(event.url).split("www.google.com/search?q=")[1];
+        if (x.includes("&"))
+          $("input.search").val(decodeURIComponent(x.split("&")[0]));
+        else $("input.search").val(decodeURIComponent(x));
+        return;
+      }
+      if (!("about:blank" == String(event.url)))
+        $("input.search").val(event.url);
+    });
+    let pizzagptopened = false;
+    function openPIzzaGPT() {
+      let browser = $("webview.browser");
+      let pizzagpt = $("webview.PizzaGPT");
+      if (!pizzagptopened) {
+        pizzagpt.css("display", "flex");
+        browser.css("width", "53%");
+        pizzagpt.css("width", "43%");
+        pizzagpt.css("height", "100%");
+        document
+          .querySelector("webview.PizzaGPT")
+          .loadURL("https://pizzagpt.it");
+      } else {
+        browser.css("width", "98%");
+        pizzagpt.css("width", "0%");
+        pizzagpt.css("height", "100%");
+        document.querySelector("webview.PizzaGPT").loadURL("about:blank");
+        pizzagpt.css("display", "none");
+      }
+      pizzagptopened = !pizzagptopened;
+    }
+    const { webContents } = require('electron')
+
+webview.addEventListener('new-window', function(event) {
+  event.preventDefault()
+  const url = event.url
+  webview.loadURL(url);
+});
+console.clear()
   </script>
 </html>

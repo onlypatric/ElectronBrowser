@@ -1,8 +1,8 @@
 {
-  "name": "electronbrowser",
-  "productName": "electronbrowser",
+  "name": "electrobrowser",
+  "productName": "electron-browser",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Surf the web using an electron-based browser which does not collect any data",
   "main": "src/index.ts",
   "scripts": {
     "start": "electron-forge start",
@@ -19,7 +19,9 @@
   "license": "MIT",
   "dependencies": {
     "electron-acrylic-window": "^0.5.11",
+    "electron-context-menu": "^3.6.1",
     "electron-squirrel-startup": "^1.0.0",
+    "electron-tabs": "^1.0.1",
     "jquery": "^3.6.4"
   },
   "devDependencies": {
