@@ -1,7 +1,7 @@
 {
   "name": "electrobrowser",
   "productName": "electron-browser",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Surf the web using an electron-based browser which does not collect any data",
   "main": "src/index.ts",
   "scripts": {
